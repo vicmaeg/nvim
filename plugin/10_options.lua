@@ -37,6 +37,7 @@ vim.o.cursorline     = true       -- Enable current line highlighting
 vim.o.linebreak      = true       -- Wrap lines at 'breakat' (if 'wrap' is set)
 vim.o.list           = true       -- Show helpful text indicators
 vim.o.number         = true       -- Show line numbers
+vim.o.relativenumber = true       -- Use relative numbers
 vim.o.pumheight      = 10         -- Make popup menu smaller
 vim.o.ruler          = false      -- Don't show cursor coordinates
 vim.o.shortmess      = 'CFOSWaco' -- Disable some built-in completion messages
@@ -120,3 +121,12 @@ local diagnostic_opts = {
 -- Use `later()` to avoid sourcing `vim.diagnostic` on startup
 MiniDeps.later(function() vim.diagnostic.config(diagnostic_opts) end)
 -- stylua: ignore end
+
+-- Extra options added from older settings ==================================
+-- Sync clipboard between OS and Neovim.
+--  Schedule the setting after `UiEnter` because it can increase startup-time.
+--  Remove this option if you want your OS clipboard to remain independent.
+--  See `:help 'clipboard'`
+vim.schedule(function()
+  vim.opt.clipboard = "unnamedplus"
+end)
