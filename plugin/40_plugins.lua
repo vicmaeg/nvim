@@ -49,9 +49,24 @@ now_if_args(function()
   --   https://github.com/nvim-treesitter/nvim-treesitter/blob/main/SUPPORTED_LANGUAGES.md
   local ensure_languages = {
     -- These are already installed. Used as an example.
-    'lua',
-    'vimdoc',
-    'markdown',
+    "bash",
+    "c",
+    "html",
+    "lua",
+    "luadoc",
+    "markdown",
+    "markdown_inline",
+    "query",
+    "vim",
+    "vimdoc",
+    "c_sharp",
+    "yaml",
+    "xml",
+    "terraform",
+    "json",
+    "go",
+    "javascript",
+    "typescript",
   }
   local isnt_installed = function(lang)
     return #vim.api.nvim_get_runtime_file('parser/' .. lang .. '.*', false) == 0
@@ -92,9 +107,10 @@ now_if_args(function()
   -- the rules provided by 'nvim-lspconfig'.
   -- Use `:h vim.lsp.config()` or 'ftplugin/lsp/' directory to configure servers.
   -- Uncomment and tweak the following `vim.lsp.enable()` call to enable servers.
-  -- vim.lsp.enable({
-  --   -- For example, if `lua-language-server` is installed, use `'lua_ls'` entry
-  -- })
+  vim.lsp.enable({
+    -- For example, if `lua-language-server` is installed, use `'lua_ls'` entry
+    'lua_ls',
+  })
 end)
 
 -- Formatting =================================================================
@@ -115,7 +131,7 @@ later(function()
   require('conform').setup({
     -- Map of filetype to formatters
     -- Make sure that necessary CLI tool is available
-    -- formatters_by_ft = { lua = { 'stylua' } },
+    formatters_by_ft = { lua = { 'stylua' } },
   })
 end)
 
@@ -140,20 +156,56 @@ later(function() add('rafamadriz/friendly-snippets') end)
 -- If you need them to work elsewhere, consider using other package managers.
 --
 -- You can use it like so:
+later(function()
+  add('mason-org/mason.nvim')
+  require("mason").setup({
+    registries = {
+      "github:mason-org/mason-registry",
+      "github:Crashdummyy/mason-registry",
+    },
+  })
+end)
+
+-- .NET development ====================================================
+
+-- 'seblyng/roslyn.nvim': Roslyn Language Server
+-- Note Disabled for now to test how the roslyn lsp that comes with easy-dotnet works
 -- later(function()
---   add('mason-org/mason.nvim')
---   require('mason').setup()
+--   add('seblyng/roslyn.nvim')
 -- end)
 
--- Beautiful, usable, well maintained color schemes outside of 'mini.nvim' and
--- have full support of its highlight groups. Use if you don't like 'miniwinter'
--- enabled in 'plugin/30_mini.lua' or other suggested 'mini.hues' based ones.
--- now(function()
---   -- Install only those that you need
---   add('sainnhe/everforest')
---   add('Shatur/neovim-ayu')
---   add('ellisonleao/gruvbox.nvim')
---
---   -- Enable only one
---   vim.cmd('color everforest')
--- end)
+-- 'GustavEikaas/easy-dotnet.nvim': dotnet plugin to make it easy to run dotnet cli commands
+later(function()
+  add({
+    source = 'GustavEikaas/easy-dotnet.nvim',
+    depends = { 'nvim-lua/plenary.nvim' }
+  })
+  require("easy-dotnet").setup({
+    test_runner = {
+      viewmode = "float",
+    },
+    -- use basic picker as they do not have support for mini.pick
+    picker = "basic",
+  })
+  -- autocmd to create files using dotnet templates
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "MiniFilesBufferCreate",
+    callback = function(args)
+      local buf_id = args.data.buf_id
+      vim.keymap.set("n", "<leader>a", function()
+        local entry = require("mini.files").get_fs_entry()
+        if entry == nil then
+          vim.notify("No fd entry in mini files", vim.log.levels.WARN)
+          return
+        end
+        local target_dir = entry.path
+        if entry.fs_type == "file" then
+          target_dir = vim.fn.fnamemodify(entry.path, ":h")
+        end
+        require("easy-dotnet").create_new_item(target_dir)
+        MiniFiles.open()
+        MiniFiles.refresh()
+      end, { buffer = buf_id, desc = "Create file from dotnet template" })
+    end,
+  })
+end)
