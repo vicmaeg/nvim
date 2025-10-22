@@ -209,3 +209,11 @@ later(function()
     end,
   })
 end)
+
+-- Git Plugins ====================================================
+later(function()
+  add('tpope/vim-fugitive')
+  add('cedarbaum/fugitive-azure-devops.vim')
+  add('tpope/vim-rhubarb')
+  add('junegunn/gv.vim')
+end)

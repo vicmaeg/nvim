@@ -164,17 +164,19 @@ nmap_leader('fV', '<Cmd>Pick visit_paths<CR>',                  'Visit paths (cw
 -- - `<Leader>go` - toggle 'mini.diff' overlay to show in-buffer unstaged changes
 -- - `<Leader>gd` - show unstaged changes as a patch in separate tabpage
 -- - `<Leader>gL` - show Git log of current file
-local git_log_cmd = [[Git log --pretty=format:\%h\ \%as\ │\ \%s --topo-order]]
-local git_log_buf_cmd = git_log_cmd .. ' --follow -- %'
 
 nmap_leader('ga', '<Cmd>Git diff --cached<CR>',             'Added diff')
 nmap_leader('gA', '<Cmd>Git diff --cached -- %<CR>',        'Added diff buffer')
+nmap_leader('gb', '<Cmd>G blame<CR>',                       'Blame')
+nmap_leader('gB', '<Cmd>GBrowse<CR>',                       'Browse')
+xmap_leader('gB', '<Cmd>\'<,\'>GBrowse<CR>',                'Browse at selection')
 nmap_leader('gc', '<Cmd>Git commit<CR>',                    'Commit')
 nmap_leader('gC', '<Cmd>Git commit --amend<CR>',            'Commit amend')
 nmap_leader('gd', '<Cmd>Git diff<CR>',                      'Diff')
 nmap_leader('gD', '<Cmd>Git diff -- %<CR>',                 'Diff buffer')
-nmap_leader('gl', '<Cmd>' .. git_log_cmd .. '<CR>',         'Log')
-nmap_leader('gL', '<Cmd>' .. git_log_buf_cmd .. '<CR>',     'Log buffer')
+nmap_leader('gg', '<Cmd>G<CR>',                             'Status')
+nmap_leader('gl', '<Cmd>GV<CR>',                            'Log')
+nmap_leader('gL', '<Cmd>GV!<CR>',                           'Log buffer')
 nmap_leader('go', '<Cmd>lua MiniDiff.toggle_overlay()<CR>', 'Toggle overlay')
 nmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',  'Show at cursor')
 
