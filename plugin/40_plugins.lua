@@ -166,7 +166,7 @@ later(function()
   })
 end)
 
--- .NET development ====================================================
+-- .NET development ===========================================================
 
 -- 'seblyng/roslyn.nvim': Roslyn Language Server
 -- Note Disabled for now to test how the roslyn lsp that comes with easy-dotnet works
@@ -210,10 +210,32 @@ later(function()
   })
 end)
 
--- Git Plugins ====================================================
+-- Git Plugins ================================================================
 later(function()
   add('tpope/vim-fugitive')
   add('cedarbaum/fugitive-azure-devops.vim')
   add('tpope/vim-rhubarb')
   add('junegunn/gv.vim')
+end)
+
+-- Note taking Plugins ========================================================
+later(function()
+  -- required by vimwiki to use markdown as syntax
+  vim.g.vimwiki_list = {{ path = '~/vimwiki/', syntax = 'markdown', ext = 'md' }}
+  -- avoid vimwiki to operate on all markdown files, only the ones under vimwiki folder
+  vim.g.vimwiki_global_ext = 0
+
+  add('vimwiki/vimwiki')
+
+  -- Add descriptions to mini.clue
+  local miniclue = require('mini.clue')
+  miniclue.set_mapping_desc('n', '<leader>ww', 'Wiki Index')
+  miniclue.set_mapping_desc('n', '<leader>wt', 'Wiki Index in tab')
+  miniclue.set_mapping_desc('n', '<leader>ws', 'List Wikis')
+  miniclue.set_mapping_desc('n', '<leader>wi', 'Diary Index')
+  miniclue.set_mapping_desc('n', '<leader>w<leader>i', 'Regenerate Diary index')
+  miniclue.set_mapping_desc('n', '<leader>w<leader>w', 'Todays Diary')
+  miniclue.set_mapping_desc('n', '<leader>w<leader>t', 'Todays Diary in tab')
+  miniclue.set_mapping_desc('n', '<leader>w<leader>y', 'Yesterday Diary')
+  miniclue.set_mapping_desc('n', '<leader>w<leader>m', 'Tomorrow Diary')
 end)
