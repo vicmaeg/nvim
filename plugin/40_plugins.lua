@@ -221,7 +221,7 @@ end)
 -- Note taking Plugins ========================================================
 later(function()
   -- required by vimwiki to use markdown as syntax
-  vim.g.vimwiki_list = {{ path = '~/vimwiki/', syntax = 'markdown', ext = 'md' }}
+  vim.g.vimwiki_list = {{ path = '~/notes/vimwiki/', syntax = 'markdown', ext = 'md' }}
   -- avoid vimwiki to operate on all markdown files, only the ones under vimwiki folder
   vim.g.vimwiki_global_ext = 0
 
