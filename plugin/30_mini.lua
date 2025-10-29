@@ -34,7 +34,8 @@ local now_if_args = _G.Config.now_if_args
 -- - `:h mini.nvim-color-schemes` - list of other color schemes
 -- - `:h MiniHues-examples` - how to define highlighting with 'mini.hues'
 -- - 'plugin/40_plugins.lua' honorable mentions - other good color schemes
-now(function() vim.cmd('colorscheme miniautumn') end)
+-- NOTE: disabled as this colorschemes doesn't seem to work in WSL + tmux
+-- now(function() vim.cmd('colorscheme miniautumn') end)
 
 -- You can try these other 'mini.hues'-based color schemes (uncomment with `gcc`):
 -- now(function() vim.cmd('colorscheme minispring') end)
@@ -104,14 +105,16 @@ now_if_args(function()
   -- searches up the file tree until the first root marker ('.git' or 'Makefile')
   -- and sets their parent directory as a current directory.
   -- This is helpful when simultaneously dealing with files from several projects.
-  MiniMisc.setup_auto_root()
+  -- NOTE: disabled due to I use monorepo, need to still configure markers
+  -- MiniMisc.setup_auto_root()
 
   -- Restore latest cursor position on file open
   MiniMisc.setup_restore_cursor()
 
   -- Synchronize terminal emulator background with Neovim's background to remove
   -- possibly different color padding around Neovim instance
-  MiniMisc.setup_termbg_sync()
+  -- NOTE: disabled as doesn't seem to work inside WSL + tmux
+  -- MiniMisc.setup_termbg_sync()
 end)
 
 -- Notifications provider. Shows all kinds of notifications in the upper right
