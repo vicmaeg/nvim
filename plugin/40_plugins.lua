@@ -248,4 +248,9 @@ MiniDeps.now(function()
   vim.cmd('color kanagawa')
 end)
 
-
+-- Testing Plugins ============================================================
+later(function()
+  vim.g["test#strategy"] = "neovim_sticky"
+  vim.g["test#csharp#runner"] = "dotnettest"
+  add('vim-test/vim-test')
+end)

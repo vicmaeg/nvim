@@ -64,7 +64,7 @@ _G.Config.leader_group_clues = {
   { mode = 'n', keys = '<Leader>o', desc = '+Other' },
   { mode = 'n', keys = '<Leader>r', desc = '+Run' },
   { mode = 'n', keys = '<Leader>s', desc = '+Session' },
-  { mode = 'n', keys = '<Leader>t', desc = '+Terminal' },
+  { mode = 'n', keys = '<Leader>t', desc = '+Tests/Terminal' },
   { mode = 'n', keys = '<Leader>v', desc = '+Visits' },
   { mode = 'n', keys = '<Leader>w', desc = '+Wiki' },
 
@@ -169,8 +169,8 @@ nmap_leader('fV', '<Cmd>Pick visit_paths<CR>',                  'Visit paths (cw
 nmap_leader('ga', '<Cmd>Git diff --cached<CR>',             'Added diff')
 nmap_leader('gA', '<Cmd>Git diff --cached -- %<CR>',        'Added diff buffer')
 nmap_leader('gb', '<Cmd>G blame<CR>',                       'Blame')
-nmap_leader('gB', '<Cmd>GBrowse<CR>',                       'Browse')
-xmap_leader('gB', '<Cmd>\'<,\'>GBrowse<CR>',                'Browse at selection')
+nmap_leader('gB', '<Cmd>GBrowse!<CR>',                      'Browse')
+xmap_leader('gB', '<Cmd>\'<,\'>GBrowse!<CR>',               'Browse at selection')
 nmap_leader('gc', '<Cmd>Git commit<CR>',                    'Commit')
 nmap_leader('gC', '<Cmd>Git commit --amend<CR>',            'Commit amend')
 nmap_leader('gd', '<Cmd>Git diff<CR>',                      'Diff')
@@ -231,9 +231,14 @@ nmap_leader('sn', '<Cmd>lua ' .. session_new .. '<CR>',         'New')
 nmap_leader('sr', '<Cmd>lua MiniSessions.select("read")<CR>',   'Read')
 nmap_leader('sw', '<Cmd>lua MiniSessions.write()<CR>',          'Write current')
 
--- t is for 'Terminal'
-nmap_leader('tT', '<Cmd>horizontal term<CR>', 'Terminal (horizontal)')
-nmap_leader('tt', '<Cmd>vertical term<CR>',   'Terminal (vertical)')
+-- t is for 'Tests'
+nmap_leader('tt', '<Cmd>TestNearest<CR>', 'Test Nearest')
+nmap_leader('tT', '<Cmd>TestFile<CR>', 'Test File')
+nmap_leader('ta', '<Cmd>TestSuite<CR>', 'Test All')
+nmap_leader('tl', '<Cmd>TestLast<CR>', 'Test Last')
+nmap_leader('tg', '<Cmd>TestVisit<CR>', 'Test Visit')
+nmap_leader('th', '<Cmd>horizontal term<CR>', 'Terminal (horizontal)')
+nmap_leader('tv', '<Cmd>vertical term<CR>',   'Terminal (vertical)')
 
 -- v is for 'Visits'. Common usage:
 -- - `<Leader>vv` - add    "core" label to current file.
