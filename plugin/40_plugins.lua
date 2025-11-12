@@ -169,10 +169,9 @@ end)
 -- .NET development ===========================================================
 
 -- 'seblyng/roslyn.nvim': Roslyn Language Server
--- Note Disabled for now to test how the roslyn lsp that comes with easy-dotnet works
--- later(function()
---   add('seblyng/roslyn.nvim')
--- end)
+later(function()
+  add('seblyng/roslyn.nvim')
+end)
 
 -- 'GustavEikaas/easy-dotnet.nvim': dotnet plugin to make it easy to run dotnet cli commands
 later(function()
@@ -181,6 +180,9 @@ later(function()
     depends = { 'nvim-lua/plenary.nvim' }
   })
   require("easy-dotnet").setup({
+    lsp = {
+      enabled = false
+    },
     test_runner = {
       viewmode = "float",
     },
@@ -251,6 +253,7 @@ end)
 -- Testing Plugins ============================================================
 later(function()
   vim.g["test#strategy"] = "neovim_sticky"
+  vim.g["test#preserve_screen"] = 0
   vim.g["test#csharp#runner"] = "dotnettest"
   add('vim-test/vim-test')
 end)
