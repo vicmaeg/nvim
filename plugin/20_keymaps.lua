@@ -8,6 +8,11 @@
 
 -- Use this section to add custom general mappings. See `:h vim.keymap.set()`.
 
+-- Shorter version of the most frequent way of going outside of terminal window
+vim.keymap.set('t', '<C-Space>', [[<C-\><C-N>]])
+vim.keymap.set('t', '<C-h>', [[<C-\><C-N><C-w>h]])
+vim.keymap.set('t', '<C-k>', [[<C-\><C-N><C-w>k]])
+
 -- An example helper to create a Normal mode mapping
 local nmap = function(lhs, rhs, desc)
   -- See `:h vim.keymap.set()`
