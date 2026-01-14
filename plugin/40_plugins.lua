@@ -242,14 +242,6 @@ later(function()
   miniclue.set_mapping_desc('n', '<leader>w<leader>m', 'Tomorrow Diary')
 end)
 
--- Theme ======================================================================
-MiniDeps.now(function()
-  -- Install only those that you need
-  add('rebelot/kanagawa.nvim')
-  -- Enable only one
-  vim.cmd('color kanagawa')
-end)
-
 -- Testing Plugins ============================================================
 later(function()
   vim.g["test#strategy"] = "neovim_sticky"
