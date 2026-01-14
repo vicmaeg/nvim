@@ -139,6 +139,20 @@ nmap_leader('eq', explore_quickfix,                         'Quickfix')
 --
 -- All these use 'mini.pick'. See `:h MiniPick-overview` for an overview.
 local pick_added_hunks_buf = '<Cmd>Pick git_hunks path="%" scope="staged"<CR>'
+local pick = require('mini.pick')
+
+local function files_rg_hidden()
+  pick.builtin.cli({
+    command = {
+      'rg',
+      '--files',
+      '--hidden',
+      '--follow',
+      '--glob', '!.git/*',
+    },
+    cwd = vim.fn.getcwd(),
+  })
+end
 
 nmap_leader('f/', '<Cmd>Pick history scope="/"<CR>',            '"/" history')
 nmap_leader('f:', '<Cmd>Pick history scope=":"<CR>',            '":" history')
@@ -150,6 +164,7 @@ nmap_leader('fC', '<Cmd>Pick git_commits path="%"<CR>',         'Commits (buf)')
 nmap_leader('fd', '<Cmd>Pick diagnostic scope="all"<CR>',       'Diagnostic workspace')
 nmap_leader('fD', '<Cmd>Pick diagnostic scope="current"<CR>',   'Diagnostic buffer')
 nmap_leader('ff', '<Cmd>Pick files<CR>',                        'Files')
+nmap_leader('fF', files_rg_hidden,                              'Files hidden')
 nmap_leader('fg', '<Cmd>Pick grep_live<CR>',                    'Grep live')
 nmap_leader('fG', '<Cmd>Pick grep pattern="<cword>"<CR>',       'Grep current word')
 nmap_leader('fh', '<Cmd>Pick help<CR>',                         'Help tags')
