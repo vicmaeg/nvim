@@ -22,33 +22,36 @@ local now_if_args = _G.Config.now_if_args
 -- requires two extra pieces that don't come with Neovim directly:
 -- - Language parsers: programs that convert text into trees. Some are built-in
 --   (like for Lua), 'nvim-treesitter' provides many others.
+--   NOTE: It requires third party software to build and install parsers.
+--   See the link for more info in "Requirements" section of the MiniMax README.
 -- - Query files: definitions of how to extract information from trees in
 --   a useful manner (see `:h treesitter-query`). 'nvim-treesitter' also provides
 --   these, while 'nvim-treesitter-textobjects' provides the ones for Neovim
 --   textobjects (see `:h text-objects`, `:h MiniAi.gen_spec.treesitter()`).
 --
 -- Add these plugins now if file (and not 'mini.starter') is shown after startup.
+--
+-- Troubleshooting:
+-- - Run `:checkhealth vim.treesitter nvim-treesitter` to see potential issues.
+-- - In case of errors related to queries for Neovim bundled parsers (like `lua`,
+--   `vimdoc`, `markdown`, etc.), manually install them via 'nvim-treesitter'
+--   with `:TSInstall <language>`. Be sure to have necessary system dependencies
+--   (see MiniMax README section for software requirements).
 now_if_args(function()
   add({
     source = 'nvim-treesitter/nvim-treesitter',
-    -- Use `main` branch since `master` branch is frozen, yet still default
-    checkout = 'main',
     -- Update tree-sitter parser after plugin is updated
     hooks = { post_checkout = function() vim.cmd('TSUpdate') end },
   })
   add({
     source = 'nvim-treesitter/nvim-treesitter-textobjects',
-    -- Same logic as for 'nvim-treesitter'
+    -- Use `main` branch since `master` branch is frozen, yet still default
+    -- It is needed for compatibility with 'nvim-treesitter' `main` branch
     checkout = 'main',
   })
 
-  -- Ensure installed parsers for listed languages. Add to `languages`
-  -- array languages which you want to have installed. To see available languages:
-  -- - Execute `:=require('nvim-treesitter').get_available()`
-  -- - Visit
-  --   https://github.com/nvim-treesitter/nvim-treesitter/blob/main/SUPPORTED_LANGUAGES.md
-  local ensure_languages = {
-    -- These are already installed. Used as an example.
+  -- Define languages which will have parsers installed and auto enabled
+  local languages = {
     "bash",
     "c",
     "html",
@@ -67,16 +70,21 @@ now_if_args(function()
     "go",
     "javascript",
     "typescript",
+    -- Add here more languages with which you want to use tree-sitter
+    -- To see available languages:
+    -- - Execute `:=require('nvim-treesitter').get_available()`
+    -- - Visit 'SUPPORTED_LANGUAGES.md' file at
+    --   https://github.com/nvim-treesitter/nvim-treesitter/blob/main
   }
   local isnt_installed = function(lang)
     return #vim.api.nvim_get_runtime_file('parser/' .. lang .. '.*', false) == 0
   end
-  local to_install = vim.tbl_filter(isnt_installed, ensure_languages)
+  local to_install = vim.tbl_filter(isnt_installed, languages)
   if #to_install > 0 then require('nvim-treesitter').install(to_install) end
 
-  -- Ensure tree-sitter enabled after opening a file for target language
+  -- Enable tree-sitter after opening a file for a target language
   local filetypes = {}
-  for _, lang in ipairs(ensure_languages) do
+  for _, lang in ipairs(languages) do
     for _, ft in ipairs(vim.treesitter.language.get_filetypes(lang)) do
       table.insert(filetypes, ft)
     end
@@ -105,7 +113,7 @@ now_if_args(function()
 
   -- Use `:h vim.lsp.enable()` to automatically enable language server based on
   -- the rules provided by 'nvim-lspconfig'.
-  -- Use `:h vim.lsp.config()` or 'ftplugin/lsp/' directory to configure servers.
+  -- Use `:h vim.lsp.config()` or 'after/lsp/' directory to configure servers.
   -- Uncomment and tweak the following `vim.lsp.enable()` call to enable servers.
   vim.lsp.enable({
     -- For example, if `lua-language-server` is installed, use `'lua_ls'` entry
@@ -129,6 +137,10 @@ later(function()
   -- - `:h conform-options`
   -- - `:h conform-formatters`
   require('conform').setup({
+    default_format_opts = {
+      -- Allow formatting from LSP server if no dedicated formatter is available
+      lsp_format = 'fallback',
+    },
     -- Map of filetype to formatters
     -- Make sure that necessary CLI tool is available
     formatters_by_ft = { lua = { 'stylua' } },
@@ -156,7 +168,7 @@ later(function() add('rafamadriz/friendly-snippets') end)
 -- If you need them to work elsewhere, consider using other package managers.
 --
 -- You can use it like so:
-later(function()
+now_if_args(function()
   add('mason-org/mason.nvim')
   require("mason").setup({
     registries = {

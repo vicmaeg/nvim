@@ -104,16 +104,14 @@ now_if_args(function()
   -- searches up the file tree until the first root marker ('.git' or 'Makefile')
   -- and sets their parent directory as a current directory.
   -- This is helpful when simultaneously dealing with files from several projects.
-  -- NOTE: disabled due to I use monorepo, need to still configure markers
-  -- MiniMisc.setup_auto_root()
+  MiniMisc.setup_auto_root({ '.git', 'Makefile', 'fourthline.yaml' })
 
   -- Restore latest cursor position on file open
   MiniMisc.setup_restore_cursor()
 
   -- Synchronize terminal emulator background with Neovim's background to remove
   -- possibly different color padding around Neovim instance
-  -- NOTE: disabled as doesn't seem to work inside WSL + tmux
-  -- MiniMisc.setup_termbg_sync()
+  MiniMisc.setup_termbg_sync()
 end)
 
 -- Notifications provider. Shows all kinds of notifications in the upper right
@@ -204,7 +202,7 @@ later(function()
     -- to find textobject covering cursor, then try to find to the right.
     -- Although this works in most cases, some are confusing. It is more robust to
     -- always try to search only covering textobject and explicitly ask to search
-    -- for next (`an`/`in`) or last (`an`/`il`).
+    -- for next (`an`/`in`) or last (`al`/`il`).
     -- Try this. If you don't like it - delete next line and this comment.
     search_method = 'cover',
   })
@@ -279,6 +277,7 @@ later(function()
       miniclue.gen_clues.g(),
       miniclue.gen_clues.marks(),
       miniclue.gen_clues.registers(),
+      miniclue.gen_clues.square_brackets(),
       -- This creates a submode for window resize mappings. Try the following:
       -- - Press `<C-w>s` to make a window split.
       -- - Press `<C-w>+` to increase height. Clue window still shows clues as if
@@ -290,30 +289,28 @@ later(function()
     },
     -- Explicitly opt-in for set of common keys to trigger clue window
     triggers = {
-      { mode = 'n', keys = '<Leader>' }, -- Leader triggers
-      { mode = 'x', keys = '<Leader>' },
-      { mode = 'n', keys = '\\' },       -- mini.basics
-      { mode = 'n', keys = '[' },        -- mini.bracketed
-      { mode = 'n', keys = ']' },
-      { mode = 'x', keys = '[' },
-      { mode = 'x', keys = ']' },
-      { mode = 'i', keys = '<C-x>' },    -- Built-in completion
-      { mode = 'n', keys = 'g' },        -- `g` key
-      { mode = 'x', keys = 'g' },
-      { mode = 'n', keys = "'" },        -- Marks
-      { mode = 'n', keys = '`' },
-      { mode = 'x', keys = "'" },
-      { mode = 'x', keys = '`' },
-      { mode = 'n', keys = '"' },        -- Registers
-      { mode = 'x', keys = '"' },
-      { mode = 'i', keys = '<C-r>' },
-      { mode = 'c', keys = '<C-r>' },
-      { mode = 'n', keys = '<C-w>' },    -- Window commands
-      { mode = 'n', keys = 'z' },        -- `z` key
-      { mode = 'x', keys = 'z' },
+      { mode = { 'n', 'x' }, keys = '<Leader>' }, -- Leader triggers
+      { mode =   'n',        keys = '\\' },       -- mini.basics
+      { mode = { 'n', 'x' }, keys = '[' },        -- mini.bracketed
+      { mode = { 'n', 'x' }, keys = ']' },
+      { mode =   'i',        keys = '<C-x>' },    -- Built-in completion
+      { mode = { 'n', 'x' }, keys = 'g' },        -- `g` key
+      { mode = { 'n', 'x' }, keys = "'" },        -- Marks
+      { mode = { 'n', 'x' }, keys = '`' },
+      { mode = { 'n', 'x' }, keys = '"' },        -- Registers
+      { mode = { 'i', 'c' }, keys = '<C-r>' },
+      { mode =   'n',        keys = '<C-w>' },    -- Window commands
+      { mode = { 'n', 'x' }, keys = 's' },        -- `s` key (mini.surround, etc.)
+      { mode = { 'n', 'x' }, keys = 'z' },        -- `z` key
     },
   })
 end)
+
+-- Command line tweaks. Improves command line editing with:
+-- - Autocompletion. Basically an automated `:h cmdline-completion`.
+-- - Autocorrection of words as-you-type. Like `:W`->`:w`, `:lau`->`:lua`, etc.
+-- - Autopeek command range (like line number at the start) as-you-type.
+later(function() require('mini.cmdline').setup() end)
 
 -- Tweak and save any color scheme. Contains utility functions to work with
 -- color spaces and color schemes. Example usage:
