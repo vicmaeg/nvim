@@ -154,10 +154,6 @@ now(function() require('mini.starter').setup() end)
 --   configure a custom statusline by setting `config.content.active` function.
 now(function() require('mini.statusline').setup() end)
 
--- Tabline. Sets `:h 'tabline'` to show all listed buffers in a line at the top.
--- Buffers are ordered as they were created. Navigate with `[b` and `]b`.
--- now(function() require('mini.tabline').setup() end)
-
 -- Step two ===================================================================
 
 -- Extra 'mini.nvim' functionality.
@@ -219,15 +215,6 @@ end)
 -- - `:h MiniAlign.gen_step` - list of support step customizations
 -- - `:h MiniAlign-algorithm` - how alignment is done on algorithmic level
 later(function() require('mini.align').setup() end)
-
--- Animate common Neovim actions. Like cursor movement, scroll, window resize,
--- window open, window close. Animations are done based on Neovim events and
--- don't require custom mappings.
---
--- It is not enabled by default because its effects are a matter of taste.
--- Also scroll and resize have some unwanted side effects (see `:h mini.animate`).
--- Uncomment next line (use `gcc`) to enable.
--- later(function() require('mini.animate').setup() end)
 
 -- Go forward/backward with square brackets. Implements consistent sets of mappings
 -- for selected targets (like buffers, diagnostic, quickfix list entries, etc.).
@@ -311,20 +298,6 @@ end)
 -- - Autocorrection of words as-you-type. Like `:W`->`:w`, `:lau`->`:lua`, etc.
 -- - Autopeek command range (like line number at the start) as-you-type.
 later(function() require('mini.cmdline').setup() end)
-
--- Tweak and save any color scheme. Contains utility functions to work with
--- color spaces and color schemes. Example usage:
--- - `:Colorscheme default` - switch with animation to the default color scheme
---
--- See also:
--- - `:h MiniColors.interactive()` - interactively tweak color scheme
--- - `:h MiniColors-recipes` - common recipes to use during interactive tweaking
--- - `:h MiniColors.convert()` - convert between color spaces
--- - `:h MiniColors-color-spaces` - list of supported color sapces
---
--- It is not enabled by default because it is not really needed on a daily basis.
--- Uncomment next line (use `gcc`) to enable.
--- later(function() require('mini.colors').setup() end)
 
 -- Comment lines. Provides functionality to work with commented lines.
 -- Uses `:h 'commentstring'` option to infer comment structure.
@@ -551,40 +524,6 @@ later(function()
   MiniKeymap.map_multistep('i', '<CR>', { 'pmenu_accept', 'minipairs_cr' })
   -- On `<BS>` just try to account for pairs from 'mini.pairs'
   MiniKeymap.map_multistep('i', '<BS>', { 'minipairs_bs' })
-end)
-
--- Window with text overview. It is displayed on the right hand side. Can be used
--- for quick overview and navigation. Hidden by default. Example usage:
--- - `<Leader>mt` - toggle map window
--- - `<Leader>mf` - focus on the map for fast navigation
--- - `<Leader>ms` - change map's side (if it covers something underneath)
---
--- See also:
--- - `:h MiniMap.gen_encode_symbols` - list of symbols to use for text encoding
--- - `:h MiniMap.gen_integration` - list of integrations to show in the map
---
--- NOTE: Might introduce lag on very big buffers (10000+ lines)
-later(function()
-  local map = require('mini.map')
-  map.setup({
-    -- Use Braille dots to encode text
-    symbols = { encode = map.gen_encode_symbols.dot('4x2') },
-    -- Show built-in search matches, 'mini.diff' hunks, and diagnostic entries
-    integrations = {
-      map.gen_integration.builtin_search(),
-      map.gen_integration.diff(),
-      map.gen_integration.diagnostic(),
-    },
-  })
-
-  -- Map built-in navigation characters to force map refresh
-  for _, key in ipairs({ 'n', 'N', '*', '#' }) do
-    local rhs = key
-      -- Also open enough folds when jumping to the next match
-      .. 'zv'
-      .. '<Cmd>lua MiniMap.refresh({}, { lines = false, scrollbar = false })<CR>'
-    vim.keymap.set('n', key, rhs)
-  end
 end)
 
 -- Move any selection in any direction. Example usage in Normal mode:
