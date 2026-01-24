@@ -366,29 +366,6 @@ later(function()
   vim.lsp.config('*', { capabilities = MiniCompletion.get_lsp_capabilities() })
 end)
 
--- Autohighlight word under cursor with a customizable delay.
--- Word boundaries are defined based on `:h 'iskeyword'` option.
---
--- It is not enabled by default because its effects are a matter of taste.
--- Uncomment next line (use `gcc`) to enable.
--- later(function() require('mini.cursorword').setup() end)
-
--- Work with diff hunks that represent the difference between the buffer text and
--- some reference text set by a source. Default source uses text from Git index.
--- Also provides summary info used in developer section of 'mini.statusline'.
--- Example usage:
--- - `ghip` - apply hunks (`gh`) within *i*nside *p*aragraph
--- - `gHG` - reset hunks (`gH`) from cursor until end of buffer (`G`)
--- - `ghgh` - apply (`gh`) hunk at cursor (`gh`)
--- - `gHgh` - reset (`gH`) hunk at cursor (`gh`)
--- - `<Leader>go` - toggle overlay
---
--- See also:
--- - `:h MiniDiff-overview` - overview of how module works
--- - `:h MiniDiff-diff-summary` - available summary information
--- - `:h MiniDiff.gen_source` - available built-in sources
-later(function() require('mini.diff').setup() end)
-
 -- Navigate and manipulate file system
 --
 -- Navigation is done using column view (Miller columns) to display nested

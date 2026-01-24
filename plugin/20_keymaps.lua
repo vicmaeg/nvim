@@ -163,22 +163,19 @@ nmap_leader('fS', '<Cmd>FzfLua lsp_document_symbols<CR>',       'Symbols documen
 -- - `<Leader>gd` - show unstaged changes as a patch in separate tabpage
 -- - `<Leader>gL` - show Git log of current file
 
-nmap_leader('ga', '<Cmd>Git diff --cached<CR>',             'Added diff')
-nmap_leader('gA', '<Cmd>Git diff --cached -- %<CR>',        'Added diff buffer')
-nmap_leader('gb', '<Cmd>G blame<CR>',                       'Blame')
-nmap_leader('gB', '<Cmd>GBrowse!<CR>',                      'Browse')
-xmap_leader('gB', '<Cmd>\'<,\'>GBrowse!<CR>',               'Browse at selection')
-nmap_leader('gc', '<Cmd>Git commit<CR>',                    'Commit')
-nmap_leader('gC', '<Cmd>Git commit --amend<CR>',            'Commit amend')
-nmap_leader('gd', '<Cmd>Git diff<CR>',                      'Diff')
-nmap_leader('gD', '<Cmd>Git diff -- %<CR>',                 'Diff buffer')
-nmap_leader('gg', '<Cmd>G<CR>',                             'Status')
-nmap_leader('gl', '<Cmd>GV<CR>',                            'Log')
-nmap_leader('gL', '<Cmd>GV!<CR>',                           'Log buffer')
-nmap_leader('go', '<Cmd>lua MiniDiff.toggle_overlay()<CR>', 'Toggle overlay')
+nmap_leader('gb', '<Cmd>Gitsigns blame<CR>',                'Blame')
+nmap_leader('gB', '<Cmd>lua Snacks.gitbrowse()<CR>',        'Browse')
+xmap_leader('gB', '<Cmd>\'<,\'>lua Snacks.gitbrowse()<CR>', 'Browse at selection')
+nmap_leader('gd', '<Cmd>CodeDiff<CR>',                      'Diff')
+nmap_leader('gD', '<Cmd>CodeDiff file HEAD<CR>',            'Diff buffer')
+nmap_leader('gg', '<Cmd>lua Snacks.lazygit()<CR>',          'LazyGit')
+nmap_leader('gh', '<Cmd>CodeDiff history<CR>',              'Git History')
+nmap_leader('gH', '<Cmd>CodeDiff history %<CR>',            'Git History file')
+nmap_leader('gl', '<Cmd>lua Snacks.lazygit.log()<CR>',      'Log')
+nmap_leader('gL', '<Cmd>lua Snacks.lazygit.log_file()<CR>', 'Log buffer')
+nmap_leader('go', '<Cmd>Gitsigns preview_hunk_inline<CR>',  'Overlay hunk')
 nmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',  'Show at cursor')
-
-xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
+xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',  'Show at selection')
 
 -- l is for 'Language'. Common usage:
 -- - `<Leader>ld` - show more diagnostic details in a floating window

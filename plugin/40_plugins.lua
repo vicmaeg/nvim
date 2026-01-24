@@ -230,10 +230,9 @@ end)
 
 -- Git Plugins ================================================================
 later(function()
-  add('tpope/vim-fugitive')
-  add('cedarbaum/fugitive-azure-devops.vim')
-  add('tpope/vim-rhubarb')
-  add('junegunn/gv.vim')
+  add('MunifTanjim/nui.nvim')
+  add('esmuellert/codediff.nvim')
+  add('lewis6991/gitsigns.nvim')
 end)
 
 -- Note taking Plugins ========================================================
