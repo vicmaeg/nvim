@@ -158,6 +158,10 @@ end)
 -- See `:h MiniSnippets.gen_loader.from_lang()`.
 later(function() add('rafamadriz/friendly-snippets') end)
 
+-- Fuzzy Finder ===============================================================
+
+later(function() add('ibhagwan/fzf-lua') end)
+
 -- Honorable mentions =========================================================
 
 -- 'mason-org/mason.nvim' (a.k.a. "Mason") is a great tool (package manager) for
