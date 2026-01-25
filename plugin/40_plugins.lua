@@ -158,6 +158,10 @@ end)
 -- See `:h MiniSnippets.gen_loader.from_lang()`.
 later(function() add('rafamadriz/friendly-snippets') end)
 
+-- Fuzzy Finder ===============================================================
+
+later(function() add('ibhagwan/fzf-lua') end)
+
 -- Honorable mentions =========================================================
 
 -- 'mason-org/mason.nvim' (a.k.a. "Mason") is a great tool (package manager) for
@@ -226,10 +230,9 @@ end)
 
 -- Git Plugins ================================================================
 later(function()
-  add('tpope/vim-fugitive')
-  add('cedarbaum/fugitive-azure-devops.vim')
-  add('tpope/vim-rhubarb')
-  add('junegunn/gv.vim')
+  add('MunifTanjim/nui.nvim')
+  add('esmuellert/codediff.nvim')
+  add('lewis6991/gitsigns.nvim')
 end)
 
 -- Note taking Plugins ========================================================

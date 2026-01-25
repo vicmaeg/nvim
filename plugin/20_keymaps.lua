@@ -70,9 +70,7 @@ _G.Config.leader_group_clues = {
   { mode = 'n', keys = '<Leader>r', desc = '+Run' },
   { mode = 'n', keys = '<Leader>s', desc = '+Session' },
   { mode = 'n', keys = '<Leader>t', desc = '+Tests/Terminal' },
-  { mode = 'n', keys = '<Leader>v', desc = '+Visits' },
   { mode = 'n', keys = '<Leader>w', desc = '+Wiki' },
-
   { mode = 'x', keys = '<Leader>g', desc = '+Git' },
   { mode = 'x', keys = '<Leader>l', desc = '+Language' },
 }
@@ -136,51 +134,28 @@ nmap_leader('eQ', explore_locations,                        'Locations list')
 -- - `<Leader>fg` - find inside files; requires `ripgrep`
 -- - `<Leader>fh` - find help tag
 -- - `<Leader>fr` - resume latest picker
--- - `<Leader>fv` - all visited paths; requires 'mini.visits'
 --
--- All these use 'mini.pick'. See `:h MiniPick-overview` for an overview.
-local pick_added_hunks_buf = '<Cmd>Pick git_hunks path="%" scope="staged"<CR>'
-local pick_workspace_symbols_live = '<Cmd>Pick lsp scope="workspace_symbol_live"<CR>'
-local pick = require('mini.pick')
-
-local function files_rg_hidden()
-  pick.builtin.cli({
-    command = {
-      'rg',
-      '--files',
-      '--hidden',
-      '--follow',
-      '--glob', '!.git/*',
-    },
-    cwd = vim.fn.getcwd(),
-  })
-end
-
-nmap_leader('f/', '<Cmd>Pick history scope="/"<CR>',            '"/" history')
-nmap_leader('f:', '<Cmd>Pick history scope=":"<CR>',            '":" history')
-nmap_leader('fa', '<Cmd>Pick git_hunks scope="staged"<CR>',     'Added hunks (all)')
-nmap_leader('fA', pick_added_hunks_buf,                         'Added hunks (buf)')
-nmap_leader('fb', '<Cmd>Pick buffers<CR>',                      'Buffers')
-nmap_leader('fc', '<Cmd>Pick git_commits<CR>',                  'Commits (all)')
-nmap_leader('fC', '<Cmd>Pick git_commits path="%"<CR>',         'Commits (buf)')
-nmap_leader('fd', '<Cmd>Pick diagnostic scope="all"<CR>',       'Diagnostic workspace')
-nmap_leader('fD', '<Cmd>Pick diagnostic scope="current"<CR>',   'Diagnostic buffer')
-nmap_leader('ff', '<Cmd>Pick files<CR>',                        'Files')
-nmap_leader('fF', files_rg_hidden,                              'Files hidden')
-nmap_leader('fg', '<Cmd>Pick grep_live<CR>',                    'Grep live')
-nmap_leader('fG', '<Cmd>Pick grep pattern="<cword>"<CR>',       'Grep current word')
-nmap_leader('fh', '<Cmd>Pick help<CR>',                         'Help tags')
-nmap_leader('fH', '<Cmd>Pick hl_groups<CR>',                    'Highlight groups')
-nmap_leader('fl', '<Cmd>Pick buf_lines scope="all"<CR>',        'Lines (all)')
-nmap_leader('fL', '<Cmd>Pick buf_lines scope="current"<CR>',    'Lines (buf)')
-nmap_leader('fm', '<Cmd>Pick git_hunks<CR>',                    'Modified hunks (all)')
-nmap_leader('fM', '<Cmd>Pick git_hunks path="%"<CR>',           'Modified hunks (buf)')
-nmap_leader('fr', '<Cmd>Pick resume<CR>',                       'Resume')
-nmap_leader('fR', '<Cmd>Pick lsp scope="references"<CR>',       'References (LSP)')
-nmap_leader('fs', pick_workspace_symbols_live,                  'Symbols workspace (live)')
-nmap_leader('fS', '<Cmd>Pick lsp scope="document_symbol"<CR>',  'Symbols document')
-nmap_leader('fv', '<Cmd>Pick visit_paths cwd=""<CR>',           'Visit paths (all)')
-nmap_leader('fV', '<Cmd>Pick visit_paths<CR>',                  'Visit paths (cwd)')
+-- All these use 'FzfLua'. See `:h fzf-lua-usage` for an overview.
+nmap_leader(' ',  '<Cmd>FzfLua builtin<CR>',                    'Search anything')
+nmap_leader('f/', '<Cmd>FzfLua search_history<CR>',             'Search history')
+nmap_leader('f:', '<Cmd>FzfLua command_history<CR>',            'Command history')
+nmap_leader('fb', '<Cmd>FzfLua buffers<CR>',                    'Buffers')
+nmap_leader('fc', '<Cmd>FzfLua git_commits<CR>',                'Commits (all)')
+nmap_leader('fC', '<Cmd>FzfLua git_bcommits<CR>',               'Commits (buf)')
+nmap_leader('fd', '<Cmd>FzfLua diagnostics_workspace<CR>',      'Diagnostic workspace')
+nmap_leader('fD', '<Cmd>FzfLua diagnostics_document<CR>',       'Diagnostic buffer')
+nmap_leader('ff', '<Cmd>FzfLua files<CR>',                      'Files')
+nmap_leader('fg', '<Cmd>FzfLua live_grep<CR>',                  'Grep live')
+nmap_leader('fG', '<Cmd>FzfLua grep_cword<CR>',                 'Grep current word')
+nmap_leader('fh', '<Cmd>FzfLua git_hunks<CR>',                  'Hunks Git')
+nmap_leader('fH', '<Cmd>FzfLua helptags<CR>',                   'Help tags')
+nmap_leader('fl', '<Cmd>FzfLua grep_project<CR>',               'Lines (all)')
+nmap_leader('fL', '<Cmd>FzfLua lines<CR>',                      'Lines (buf)')
+nmap_leader('fo', '<Cmd>FzfLua oldfiles<CR>',                   'Old files')
+nmap_leader('fr', '<Cmd>FzfLua resume<CR>',                     'Resume')
+nmap_leader('fR', '<Cmd>FzfLua lsp_references<CR>',             'References (LSP)')
+nmap_leader('fs', '<Cmd>FzfLua lsp_live_workspace_symbols<CR>', 'Symbols workspace (live)')
+nmap_leader('fS', '<Cmd>FzfLua lsp_document_symbols<CR>',       'Symbols document')
 
 -- g is for 'Git'. Common usage:
 -- - `<Leader>gs` - show information at cursor
@@ -188,22 +163,19 @@ nmap_leader('fV', '<Cmd>Pick visit_paths<CR>',                  'Visit paths (cw
 -- - `<Leader>gd` - show unstaged changes as a patch in separate tabpage
 -- - `<Leader>gL` - show Git log of current file
 
-nmap_leader('ga', '<Cmd>Git diff --cached<CR>',             'Added diff')
-nmap_leader('gA', '<Cmd>Git diff --cached -- %<CR>',        'Added diff buffer')
-nmap_leader('gb', '<Cmd>G blame<CR>',                       'Blame')
-nmap_leader('gB', '<Cmd>GBrowse!<CR>',                      'Browse')
-xmap_leader('gB', '<Cmd>\'<,\'>GBrowse!<CR>',               'Browse at selection')
-nmap_leader('gc', '<Cmd>Git commit<CR>',                    'Commit')
-nmap_leader('gC', '<Cmd>Git commit --amend<CR>',            'Commit amend')
-nmap_leader('gd', '<Cmd>Git diff<CR>',                      'Diff')
-nmap_leader('gD', '<Cmd>Git diff -- %<CR>',                 'Diff buffer')
-nmap_leader('gg', '<Cmd>G<CR>',                             'Status')
-nmap_leader('gl', '<Cmd>GV<CR>',                            'Log')
-nmap_leader('gL', '<Cmd>GV!<CR>',                           'Log buffer')
-nmap_leader('go', '<Cmd>lua MiniDiff.toggle_overlay()<CR>', 'Toggle overlay')
+nmap_leader('gb', '<Cmd>Gitsigns blame<CR>',                'Blame')
+nmap_leader('gB', '<Cmd>lua Snacks.gitbrowse()<CR>',        'Browse')
+xmap_leader('gB', '<Cmd>\'<,\'>lua Snacks.gitbrowse()<CR>', 'Browse at selection')
+nmap_leader('gd', '<Cmd>CodeDiff<CR>',                      'Diff')
+nmap_leader('gD', '<Cmd>CodeDiff file HEAD<CR>',            'Diff buffer')
+nmap_leader('gg', '<Cmd>lua Snacks.lazygit()<CR>',          'LazyGit')
+nmap_leader('gh', '<Cmd>CodeDiff history<CR>',              'Git History')
+nmap_leader('gH', '<Cmd>CodeDiff history %<CR>',            'Git History file')
+nmap_leader('gl', '<Cmd>lua Snacks.lazygit.log()<CR>',      'Log')
+nmap_leader('gL', '<Cmd>lua Snacks.lazygit.log_file()<CR>', 'Log buffer')
+nmap_leader('go', '<Cmd>Gitsigns preview_hunk_inline<CR>',  'Overlay hunk')
 nmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',  'Show at cursor')
-
-xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
+xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',  'Show at selection')
 
 -- l is for 'Language'. Common usage:
 -- - `<Leader>ld` - show more diagnostic details in a floating window
