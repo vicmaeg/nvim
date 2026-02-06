@@ -51,6 +51,8 @@ now_if_args(function()
   })
 
   -- Define languages which will have parsers installed and auto enabled
+  -- After changing this, restart Neovim once to install necessary parsers. Wait
+  -- for the installation to finish before opening a file for added language(s).
   local languages = {
     "bash",
     "c",
@@ -161,6 +163,14 @@ later(function() add('rafamadriz/friendly-snippets') end)
 -- Fuzzy Finder ===============================================================
 
 later(function() add('ibhagwan/fzf-lua') end)
+
+-- Themes =====================================================================
+
+MiniDeps.now(function()
+  add('folke/tokyonight.nvim')
+  add('rebelot/kanagawa.nvim')
+  vim.cmd('color tokyonight-night')
+end)
 
 -- Honorable mentions =========================================================
 
