@@ -162,7 +162,12 @@ later(function() add('rafamadriz/friendly-snippets') end)
 
 -- Fuzzy Finder ===============================================================
 
-MiniDeps.now(function() add('ibhagwan/fzf-lua') end)
+MiniDeps.now(function()
+  add('ibhagwan/fzf-lua')
+  require("fzf-lua").setup({
+      ui_select = true,
+    })
+end)
 
 -- Themes =====================================================================
 
