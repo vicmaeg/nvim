@@ -93,6 +93,16 @@ vim.o.completeopt = 'menuone,noselect,fuzzy,nosort' -- Use custom behavior
 local f = function() vim.cmd('setlocal formatoptions-=c formatoptions-=o') end
 _G.Config.new_autocmd('FileType', nil, f, "Proper 'formatoptions'")
 
+-- start with File picker on VimEnter
+local pickerCallback = function()
+    if vim.fn.argc() == 0 and vim.bo.buftype == "" then
+      vim.schedule(function()
+        require("fzf-lua").files()
+      end)
+    end
+  end
+_G.Config.new_autocmd('VimEnter', nil, pickerCallback, "Run File Picker on VimEnter")
+
 -- There are other autocommands created by 'mini.basics'. See 'plugin/30_mini.lua'.
 
 -- Diagnostics ================================================================
